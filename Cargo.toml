@@ -1,0 +1,18 @@
+[package]
+name = "valence-tool"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+valence-library-utils = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-library-utils" }
+valence-astroport-lper = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-astroport-lper" }
+valence-astroport-utils = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-astroport-utils" }
+valence-splitter-library= { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-splitter-library" }
+valence-authorization-utils = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-authorization-utils" }
+valence-account-utils = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-account-utils" }
+clap = { version = "4.3", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+cosmwasm-std    = { version = "2.1.3" }
+anyhow = "1.0"
+dotenv = "0.15" 
