@@ -3,7 +3,7 @@ use serde::Deserialize;
 use std::str::FromStr;
 
 #[derive(Parser)]
-#[command(name = "valence-tool")]
+#[command(name = "liquidity-deployment-tool")]
 #[command(about = "CLI tool to interact with Valence Authorization contract", long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
@@ -13,15 +13,16 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Commands {
     /// Create an authorization message
-    CreateAuthorization {
-        key_moniker: String,
-        pool: PoolInfo,
+    CreateAuthorization { label: String, pool: PoolInfo },
+    /// Fund a valence input account
+    FundProgram {
+        destination: String,
+        funds: String, // Example: "10untrn,10ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
     },
-    /// Send a message to the Valence Authorization contract
-    SendMsg {
-        key_moniker: String,
-        msg: String,
-    },
+    /// Send a message to the Valence Authorization contract to execute authorization
+    ExecuteAuthorization { label: String },
+    /// Tick the processor contract
+    TickProcessor,
 }
 
 #[derive(Debug, Deserialize, Clone)]

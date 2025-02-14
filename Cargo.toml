@@ -1,10 +1,11 @@
 [package]
-name = "valence-tool"
+name = "liquidity-deployment-tool"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 valence-library-utils = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-library-utils" }
+valence-processor-utils = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-processor-utils" }
 valence-astroport-lper = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-astroport-lper" }
 valence-astroport-utils = { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-astroport-utils" }
 valence-splitter-library= { git = "https://github.com/timewave-computer/valence-protocol", package = "valence-splitter-library" }
