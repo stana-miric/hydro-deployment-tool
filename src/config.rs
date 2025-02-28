@@ -1,18 +1,21 @@
 use anyhow::{Context, Result};
-use std::env; // Import Context from anyhow for more descriptive errors
+use std::env;
 
 #[derive(Debug, Clone)]
 pub struct Config {
-    pub auth_contract_address: String,
-    pub processor_contract_address: String,
     pub base_account_code_id: u64,
     pub spliter_code_id: u64,
     pub astro_lper_code_id: u64,
-    pub liquidity_deployer_address: String, // admin address on neutron that will be liquidity deployer
-    pub liquidity_deployer_moniker: String, // moniker that belongs to liquidity deployer key
-    pub node_rpc: String,
-    pub node_binary: String,
-    pub chain_id: String,
+    pub astro_withdraw_code_id: u64,
+    pub authorization_code_id: u64,
+    pub processor_code_id: u64,
+    pub tool_operator_address: String,
+    pub tool_operator_moniker: String,
+    pub neutron_dao_committee_address: String,
+    // flags related to communication with neutron node
+    pub neutron_rpc: String,
+    pub neutron_binary: String,
+    pub neutron_chain_id: String,
     pub home: String,
     pub gas_price: String,
     pub gas_adjustment: String,
@@ -25,12 +28,14 @@ pub fn load_config() -> Result<Config> {
         .context("LD_TOOL_SPLITER_CODE_ID environment variable is required")?;
     let astro_lper_code_id_str = env::var("LD_TOOL_ASTRO_LPER_CODE_ID")
         .context("LD_TOOL_ASTRO_LPER_CODE_ID environment variable is required")?;
+    let astro_withdraw_code_id_str = env::var("LD_TOOL_ASTRO_WITHDRAW_CODE_ID")
+        .context("LD_TOOL_ASTRO_WITHDRAW_CODE_ID environment variable is required")?;
+    let authorization_code_id_str = env::var("LD_TOOL_AUTHORIZATION_CODE_ID")
+        .context("LD_TOOL_AUTHORIZATION_CODE_ID environment variable is required")?;
+    let processor_code_id_str = env::var("LD_TOOL_PROCESSOR_CODE_ID")
+        .context("LD_TOOL_PROCESSOR_CODE_ID environment variable is required")?;
 
     Ok(Config {
-        auth_contract_address: env::var("LD_TOOL_AUTHORIZATION_CONTRACT_ADDRESS")
-            .context("LD_TOOL_AUTHORIZATION_CONTRACT_ADDRESS environment variable is required")?,
-        processor_contract_address: env::var("LD_TOOL_PROCESSOR_CONTRACT_ADDRESS")
-            .context("LD_TOOL_PROCESSOR_CONTRACT_ADDRESS environment variable is required")?,
         base_account_code_id: base_account_code_id_str
             .parse()
             .context("Failed to parse LD_TOOL_BASE_ACCOUNT_CODE_ID")?,
@@ -40,15 +45,26 @@ pub fn load_config() -> Result<Config> {
         astro_lper_code_id: astro_lper_code_id_str
             .parse()
             .context("Failed to parse LD_TOOL_ASTRO_LPER_CODE_ID")?,
-        liquidity_deployer_address: env::var("LD_TOOL_LIQUIDITY_DEPLOYER_ADDRESS")
-            .context("LD_TOOL_LIQUIDITY_DEPLOYER_ADDRESS environment variable is required")?,
-        liquidity_deployer_moniker: env::var("LD_TOOL_LIQUIDITY_DEPLOYER_MONIKER")
-            .context("LD_TOOL_LIQUIDITY_DEPLOYER_MONIKER environment variable is required")?,
-        node_rpc: env::var("LD_TOOL_NEUTRON_NODE_RPC")
+        astro_withdraw_code_id: astro_withdraw_code_id_str
+            .parse()
+            .context("Failed to parse LD_TOOL_ASTRO_WITHDRAW_CODE_ID")?,
+        authorization_code_id: authorization_code_id_str
+            .parse()
+            .context("Failed to parse LD_TOOL_AUTHORIZATION_CODE_ID")?,
+        processor_code_id: processor_code_id_str
+            .parse()
+            .context("Failed to parse LD_TOOL_PROCESSOR_CODE_ID")?,
+        tool_operator_address: env::var("LD_TOOL_OPERATOR_ADDRESS")
+            .context("LD_TOOL_OPERATOR_ADDRESS environment variable is required")?,
+        tool_operator_moniker: env::var("LD_TOOL_OPERATOR_MONIKER")
+            .context("LD_TOOL_OPERATOR_MONIKER environment variable is required")?,
+        neutron_dao_committee_address: env::var("LD_TOOL_DAO_COMMITTEE_ADDRESS")
+            .context("LD_TOOL_DAO_COMMITTEE_ADDRESS environment variable is required")?,
+        neutron_rpc: env::var("LD_TOOL_NEUTRON_NODE_RPC")
             .context("LD_TOOL_NEUTRON_NODE_RPC environment variable is required")?,
-        node_binary: env::var("LD_TOOL_NEUTRON_NODE_BINARY")
+        neutron_binary: env::var("LD_TOOL_NEUTRON_NODE_BINARY")
             .context("LD_TOOL_NEUTRON_NODE_BINARY environment variable is required")?,
-        chain_id: env::var("LD_TOOL_NEUTRON_CHAIN_ID")
+        neutron_chain_id: env::var("LD_TOOL_NEUTRON_CHAIN_ID")
             .context("LD_TOOL_NEUTRON_CHAIN_ID environment variable is required")?,
         home: env::var("LD_TOOL_HOME_DIR")
             .context("LD_TOOL_HOME_DIR environment variable is required")?,
