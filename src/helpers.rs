@@ -184,9 +184,7 @@ fn instantiate_astro_lper_library(
                 output_addr: LibraryAccountType::Addr(output_addr.to_string()),
                 pool_addr: pool.address.to_string(),
                 lp_config: LiquidityProviderConfig {
-                    pool_type: valence_astroport_utils::PoolType::Cw20LpToken(
-                        valence_astroport_utils::astroport_cw20_lp_token::PairType::Xyk {},
-                    ),
+                    pool_type: pool.pool_type.clone(),
                     asset_data: AssetData {
                         asset1: pool.denom_a.to_string(),
                         asset2: pool.denom_b.to_string(),
@@ -221,9 +219,7 @@ fn instantiate_astro_withdraw_library(
             output_addr: LibraryAccountType::Addr(config.neutron_dao_committee_address.to_string()),
             pool_addr: pool.address.to_string(),
             withdrawer_config: valence_astroport_withdrawer::msg::LiquidityWithdrawerConfig {
-                pool_type: valence_astroport_utils::PoolType::Cw20LpToken(
-                    valence_astroport_utils::astroport_cw20_lp_token::PairType::Xyk {},
-                ),
+                pool_type: pool.pool_type.clone(),
                 asset_data: AssetData {
                     asset1: pool.denom_a.to_string(),
                     asset2: pool.denom_b.to_string(),

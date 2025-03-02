@@ -1,5 +1,6 @@
 use clap::{Parser, Subcommand, ValueEnum};
 use serde::Deserialize;
+use valence_astroport_utils::{astroport_cw20_lp_token, astroport_native_lp_token, PoolType};
 
 #[derive(Parser)]
 #[command(name = "liquidity-deployment-tool")]
@@ -52,15 +53,32 @@ pub struct PoolInfo {
     pub amount_b: u128,
     pub denom_a: String,
     pub denom_b: String,
+    pub pool_type: PoolType,
 }
 
 fn parse_pool(s: &str) -> Result<PoolInfo, String> {
     let parts: Vec<&str> = s.split(',').collect();
-    if parts.len() != 5 {
+    if parts.len() != 6 {
         return Err(
-            "Invalid format. Expected: address,amount_a,amount_b,denom_a,denom_b".to_string(),
+            "Invalid format. Expected: address,amount_a,amount_b,denom_a,denom_b,pool_type"
+                .to_string(),
         );
     }
+
+    let pool_type = match parts[5] {
+        "xyk_cw20" => PoolType::Cw20LpToken(astroport_cw20_lp_token::PairType::Xyk {}),
+        "stable_cw20" => PoolType::Cw20LpToken(astroport_cw20_lp_token::PairType::Stable {}),
+        "custom_cw20" => PoolType::Cw20LpToken(astroport_cw20_lp_token::PairType::Custom(
+            parts[5].to_string(),
+        )),
+        "xyk_native" => PoolType::NativeLpToken(astroport_native_lp_token::PairType::Xyk {}),
+        "stable_native" => PoolType::NativeLpToken(astroport_native_lp_token::PairType::Stable {}),
+        "custom_native" => PoolType::NativeLpToken(astroport_native_lp_token::PairType::Custom(
+            parts[5].to_string(),
+        )),
+        _ => return Err("Invalid pool_type format".to_string()),
+    };
+
     Ok(PoolInfo {
         address: parts[0].to_string(),
         amount_a: parts[1]
@@ -71,5 +89,6 @@ fn parse_pool(s: &str) -> Result<PoolInfo, String> {
             .map_err(|_| "Invalid amount_b format".to_string())?,
         denom_a: parts[3].to_string(),
         denom_b: parts[4].to_string(),
+        pool_type,
     })
 }
